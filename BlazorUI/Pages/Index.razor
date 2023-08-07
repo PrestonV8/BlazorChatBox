@@ -1,0 +1,44 @@
+﻿@page "/"
+@using BlazorUI.Models;
+
+<PageTitle>Index</PageTitle>
+
+<h1>Welcome to Preston's ChatBox</h1>
+
+<EditForm Model="myData" OnValidSubmit="AddMessage">
+    <ValidationSummary />
+
+    <label for="message" class="form-label">@nameof(myData.Message)</label>
+
+    <InputText id="Enter Message" @bind-Value="myData.Message" class="form-control" />
+
+    <button class="btn btn-primary" type="submit">Send Message</button>
+</EditForm>
+
+<ul>
+    @foreach (string message in messages)
+    {
+        <li>@message</li>
+    }
+</ul>
+
+
+@code {
+    private MessageModel myData = new();
+    private List<string> messages = new();
+    private DateTime today;
+
+    private void AddMessage()
+    {
+        string message = "";
+        string currentTime = "";
+        string currentDayOfWeek;
+        today = DateTime.Now;
+
+        currentTime = today.ToString(format: "t");
+        currentDayOfWeek = today.ToString(format: "dddd");
+
+        messages.Add($"[{currentDayOfWeek} {currentTime}] {myData.Message}");
+        myData = new();
+    }
+}
